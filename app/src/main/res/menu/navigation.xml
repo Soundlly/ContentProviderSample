@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_storage_local"
+        android:icon="@drawable/ic_storage_local_24dp"
+        android:title="@string/title_storage_local"/>
+
+    <item
+        android:id="@+id/navigation_storage_shared"
+        android:icon="@drawable/ic_storage_shared_24dp"
+        android:title="@string/title_storage_shared"/>
+
+</menu>
