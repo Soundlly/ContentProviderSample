@@ -4,8 +4,8 @@ import android.content.ContentValues
 import android.database.Cursor
 
 data class SwitchModel(
-    private val key: String,
-    private val value: Boolean
+    val key: String,
+    val value: Boolean
 ) {
     fun toContentValues() : ContentValues = ContentValues().apply {
         put(SwitchModel.Columns.KEY, key)
