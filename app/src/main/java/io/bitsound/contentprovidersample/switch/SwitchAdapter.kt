@@ -36,9 +36,15 @@ class SwitchAdapter(private val context: Context, private val authority: String)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(position) {
             in iHeader until iSwitch -> (holder as HeaderViewHolder).bind()
-            in iSwitch until iFooter -> (holder as SwitchViewHolder).bind(switches[position - iSwitch], {
-                this.removeAt(position - iSwitch)
-            })
+            in iSwitch until iFooter -> (holder as SwitchViewHolder).bind(
+                switches[position - iSwitch],
+                { _, isChecked ->
+                    this.updateAt(position - iSwitch, isChecked)
+                },
+                {
+                    this.removeAt(position - iSwitch)
+                }
+            )
             iFooter -> (holder as FooterViewHolder).bind({ _ ->
                 AlertDialog.Builder(context)
                     .setTitle("Insert Switch Label")
@@ -96,6 +102,20 @@ class SwitchAdapter(private val context: Context, private val authority: String)
                 switches.add(data)
             } catch (e: SecurityException) {
                 Toast.makeText(context, "Failed to insert $data through ${SampleContentProviderClient.dirUriOf(authority)}", Toast.LENGTH_LONG).show()
+            }
+            reconfigure()
+        }
+    }
+
+    private fun updateAt(index: Int, checked: Boolean) {
+        synchronized(SwitchAdapter::class.java) {
+            val data = switches[index].copy(value = checked)
+            try {
+                val returned = context.contentResolver.update(SampleContentProviderClient.itemUriOf(authority, data), data.toContentValues(), null, null)
+                Log.d("SwitchAdapter.updateAt", returned.toString())
+                switches[index] = data
+            } catch (e: SecurityException) {
+                Toast.makeText(context, "Failed to update $data through ${SampleContentProviderClient.dirUriOf(authority)}", Toast.LENGTH_LONG).show()
             }
             reconfigure()
         }
