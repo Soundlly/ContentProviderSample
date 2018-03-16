@@ -6,13 +6,13 @@
     android:layout_height="@dimen/unit_6x">
 
     <ImageButton
-        android:id="@+id/add_switch"
+        android:id="@+id/btn_insert_switch"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="0dp"
         android:layout_marginTop="0dp"
         android:contentDescription="@string/add_switch"
-        android:src="@drawable/ic_add_24dp"
+        android:src="@drawable/ic_switch_insert_24dp"
         android:scaleType="center"
         android:background="?attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
