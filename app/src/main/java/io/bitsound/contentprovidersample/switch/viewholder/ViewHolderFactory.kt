@@ -17,7 +17,7 @@ object ViewHolderFactory {
     }
 
     fun create(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val inflater = LayoutInflater.from(App.context())
+        val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             ViewType.HEADER -> HeaderViewHolder(inflater.inflate(R.layout.viewholder_header, parent, false))
             ViewType.SWITCH -> SwitchViewHolder(inflater.inflate(R.layout.viewholder_switch, parent, false))
