@@ -23,9 +23,8 @@ android {
     flavorDimensions "application"
     productFlavors {
 
-        def applicationNames = ["Provider Sample A", "Provider Sample B"]
         def applicationIds = ["io.bitsound.contentprovidersample.alpha", "io.bitsound.contentprovidersample.beta"]
-        def providerAuthorities = applicationIds.collect { "${it}.provider" }
+        def applicationNames = ["Provider Sample A", "Provider Sample B"]
 
         alpha {
             dimension "application"
@@ -33,20 +32,16 @@ android {
 
             applicationId applicationIds[local]
             def applicationName = applicationNames[local]
-            def localProviderAuthority = providerAuthorities[local]
-            def sharedProviderAuthority = providerAuthorities[shared]
+            def commonProviderAuthority = "io.bitsound.contentprovidersample.provider"
             def commonProviderPermission = "io.bitsound.contentprovidersample.provider.READWRITE"
 
-            buildConfigField "String", "LOCAL_PROVIDER_AUTHORITY", "\"${localProviderAuthority}\""
-            buildConfigField "String", "SHARED_PROVIDER_AUTHORITY", "\"${sharedProviderAuthority}\""
+            buildConfigField "String", "PROVIDER_AUTHORITY", "\"${commonProviderAuthority}\""
             manifestPlaceholders = [
-                localProviderAuthority: localProviderAuthority,
-                sharedProviderAuthority: sharedProviderAuthority,
+                commonProviderAuthority: commonProviderAuthority,
                 commonProviderPermission: commonProviderPermission,
             ]
             resValue "string", "app_name", applicationName
-            resValue "string", "localProviderAuthority", localProviderAuthority
-            resValue "string", "sharedProviderAuthority", sharedProviderAuthority
+            resValue "string", "commonProviderAuthority", commonProviderAuthority
             resValue "string", "commonProviderPermission", commonProviderPermission
         }
         beta {
@@ -55,20 +50,16 @@ android {
 
             applicationId applicationIds[local]
             def applicationName = applicationNames[local]
-            def localProviderAuthority = providerAuthorities[local]
-            def sharedProviderAuthority = providerAuthorities[shared]
+            def commonProviderAuthority = "io.bitsound.contentprovidersample.provider"
             def commonProviderPermission = "io.bitsound.contentprovidersample.provider.READWRITE"
 
-            buildConfigField "String", "LOCAL_PROVIDER_AUTHORITY", "\"${localProviderAuthority}\""
-            buildConfigField "String", "SHARED_PROVIDER_AUTHORITY", "\"${sharedProviderAuthority}\""
+            buildConfigField "String", "PROVIDER_AUTHORITY", "\"${commonProviderAuthority}\""
             manifestPlaceholders = [
-                localProviderAuthority: localProviderAuthority,
-                sharedProviderAuthority: sharedProviderAuthority,
+                commonProviderAuthority: commonProviderAuthority,
                 commonProviderPermission: commonProviderPermission,
             ]
             resValue "string", "app_name", applicationName
-            resValue "string", "localProviderAuthority", localProviderAuthority
-            resValue "string", "sharedProviderAuthority", sharedProviderAuthority
+            resValue "string", "commonProviderAuthority", commonProviderAuthority
             resValue "string", "commonProviderPermission", commonProviderPermission
         }
     }

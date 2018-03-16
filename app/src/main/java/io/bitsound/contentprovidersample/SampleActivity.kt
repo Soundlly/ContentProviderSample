@@ -10,8 +10,8 @@ import kotlinx.android.synthetic.main.activity_sample.*
 
 class SampleActivity : AppCompatActivity() {
 
-    private val localSwitchAdapter by lazy { SwitchAdapter(this@SampleActivity, BuildConfig.LOCAL_PROVIDER_AUTHORITY) }
-    private val sharedSwitchAdapter by lazy { SwitchAdapter(this@SampleActivity, BuildConfig.SHARED_PROVIDER_AUTHORITY) }
+    private val localSwitchAdapter by lazy { SwitchAdapter(this@SampleActivity, BuildConfig.PROVIDER_AUTHORITY) }
+    private val sharedSwitchAdapter by lazy { SwitchAdapter(this@SampleActivity, BuildConfig.PROVIDER_AUTHORITY) }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {

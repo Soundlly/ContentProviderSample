@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteQueryBuilder
 import android.net.Uri
 import android.provider.BaseColumns
 import android.util.Log
-import io.bitsound.contentprovidersample.models.SwitchModel
 import io.bitsound.contentprovidersample.tables.SwitchTable
 
 class SampleContentProvider : ContentProvider() {
@@ -22,8 +21,8 @@ class SampleContentProvider : ContentProvider() {
 
         private val uriMatcher : UriMatcher by lazy {
             UriMatcher(UriMatcher.NO_MATCH).apply {
-                addURI(BuildConfig.LOCAL_PROVIDER_AUTHORITY, SwitchTable.NAME, SWITCH_DIR)
-                addURI(BuildConfig.LOCAL_PROVIDER_AUTHORITY, "${SwitchTable.NAME}/#", SWITCH_ITEM)
+                addURI(BuildConfig.PROVIDER_AUTHORITY, SwitchTable.NAME, SWITCH_DIR)
+                addURI(BuildConfig.PROVIDER_AUTHORITY, "${SwitchTable.NAME}/#", SWITCH_ITEM)
             }
         }
     }
@@ -42,7 +41,7 @@ class SampleContentProvider : ContentProvider() {
                     null,
                     values
                 )
-                return Uri.parse("content://${BuildConfig.LOCAL_PROVIDER_AUTHORITY}/${SwitchTable.NAME}/$id")
+                return Uri.parse("content://${BuildConfig.PROVIDER_AUTHORITY}/${SwitchTable.NAME}/$id")
             }
             SWITCH_ITEM -> throw IllegalArgumentException("Invalid URI : $uri")
             else -> throw IllegalArgumentException("Invalid URI : $uri")
@@ -116,8 +115,8 @@ class SampleContentProvider : ContentProvider() {
 
     override fun getType(uri: Uri?): String {
         return when(uriMatcher.match(uri)) {
-            SWITCH_DIR -> "vnd.android.cursor.dir/vnd.${BuildConfig.LOCAL_PROVIDER_AUTHORITY}.country"
-            SWITCH_ITEM -> "vnd.android.cursor.item/vnd.${BuildConfig.LOCAL_PROVIDER_AUTHORITY}.country"
+            SWITCH_DIR -> "vnd.android.cursor.dir/vnd.${BuildConfig.PROVIDER_AUTHORITY}.country"
+            SWITCH_ITEM -> "vnd.android.cursor.item/vnd.${BuildConfig.PROVIDER_AUTHORITY}.country"
             else -> throw IllegalArgumentException("Invalid URI : $uri")
         }
     }
