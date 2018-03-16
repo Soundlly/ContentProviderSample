@@ -9,17 +9,24 @@ import android.view.ViewGroup
 import android.widget.EditText
 import io.bitsound.contentprovidersample.SampleContentProvider
 import io.bitsound.contentprovidersample.models.SwitchModel
+import io.bitsound.contentprovidersample.models.toSwitchModel
 import io.bitsound.contentprovidersample.switch.viewholder.FooterViewHolder
 import io.bitsound.contentprovidersample.switch.viewholder.HeaderViewHolder
 import io.bitsound.contentprovidersample.switch.viewholder.SwitchViewHolder
 import io.bitsound.contentprovidersample.switch.viewholder.ViewHolderFactory
+import io.bitsound.contentprovidersample.tables.SwitchTable
 
 
-class SwitchAdapter(private val context: Context, private val switches: MutableList<SwitchModel> = ArrayList()) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SwitchAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var iHeader: Int = 0                        // First Header Index
-    private var iSwitch: Int = iHeader + 1              // First Switch Index
-    private var iFooter: Int = switches.size + iSwitch  // First Footer Index
+    private lateinit var switches: ArrayList<SwitchModel>
+    private var iHeader: Int = 0 // First Header Index
+    private var iSwitch: Int = 0 // First Switch Index
+    private var iFooter: Int = 0 // First Footer Index
+
+    init {
+        reconfigure()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolderFactory.create(parent, viewType)
@@ -58,6 +65,21 @@ class SwitchAdapter(private val context: Context, private val switches: MutableL
     }
 
     private fun reconfigure() {
+        switches = ArrayList()
+        context.contentResolver.query(
+            SampleContentProvider.dirUri(),
+            SwitchTable.Columns.all,
+            null,
+            null,
+            null
+        )?.let { cursor ->
+            if (cursor.moveToFirst()) {
+                do switches.add(cursor.toSwitchModel())
+                while(cursor.moveToNext())
+            }
+            cursor.close()
+        }
+
         iHeader = 0
         iSwitch = iHeader + 1
         iFooter = switches.size + iSwitch
