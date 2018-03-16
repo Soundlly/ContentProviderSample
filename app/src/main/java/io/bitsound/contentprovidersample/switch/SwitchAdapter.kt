@@ -76,7 +76,7 @@ class SwitchAdapter(private val context: Context, private val authority: String)
                     cursor.close()
                 }
         } catch (e: SecurityException) {
-            Toast.makeText(context, "Failed to fetch from ${SampleContentProviderClient.dirUriOf(authority)}", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Failed to fetch through ${SampleContentProviderClient.dirUriOf(authority)}", Toast.LENGTH_LONG).show()
         }
 
         iHeader = 0
@@ -93,7 +93,7 @@ class SwitchAdapter(private val context: Context, private val authority: String)
                 data.id = returned.pathSegments[1].toLongOrNull()
                 switches.add(data)
             } catch (e: SecurityException) {
-                Toast.makeText(context, "Failed to Insert $data into ${SampleContentProviderClient.dirUriOf(authority)}", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Failed to insert $data through ${SampleContentProviderClient.dirUriOf(authority)}", Toast.LENGTH_LONG).show()
             }
             reconfigure()
         }

@@ -8,6 +8,6 @@ import kotlinx.android.synthetic.main.viewholder_footer.view.*
 class FooterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     fun bind(listener: (View) -> Unit) {
-        itemView.add_switch.setOnClickListener(listener)
+        itemView.btn_insert_switch.setOnClickListener(listener)
     }
 }
