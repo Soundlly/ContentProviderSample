@@ -26,11 +26,6 @@ class SampleContentProvider : ContentProvider() {
                 addURI(BuildConfig.LOCAL_PROVIDER_AUTHORITY, "${SwitchTable.NAME}/#", SWITCH_ITEM)
             }
         }
-
-        fun dirUri() : Uri?
-            = Uri.parse("content://${BuildConfig.LOCAL_PROVIDER_AUTHORITY}/${SwitchTable.NAME}")
-        fun itemUri(switchModel: SwitchModel) : Uri?
-            = Uri.parse("content://${BuildConfig.LOCAL_PROVIDER_AUTHORITY}/${SwitchTable.NAME}/${switchModel.id}")
     }
 
     override fun onCreate(): Boolean {

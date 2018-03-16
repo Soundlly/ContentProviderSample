@@ -7,7 +7,7 @@ import android.text.InputType
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.EditText
-import io.bitsound.contentprovidersample.SampleContentProvider
+import io.bitsound.contentprovidersample.SampleContentProviderClient
 import io.bitsound.contentprovidersample.models.SwitchModel
 import io.bitsound.contentprovidersample.models.toSwitchModel
 import io.bitsound.contentprovidersample.switch.viewholder.FooterViewHolder
@@ -17,7 +17,7 @@ import io.bitsound.contentprovidersample.switch.viewholder.ViewHolderFactory
 import io.bitsound.contentprovidersample.tables.SwitchTable
 
 
-class SwitchAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SwitchAdapter(private val context: Context, private val authority: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var switches: ArrayList<SwitchModel>
     private var iHeader: Int = 0 // First Header Index
@@ -67,7 +67,7 @@ class SwitchAdapter(private val context: Context) : RecyclerView.Adapter<Recycle
     private fun reconfigure() {
         switches = ArrayList()
         context.contentResolver.query(
-            SampleContentProvider.dirUri(),
+            SampleContentProviderClient.dirUriOf(authority),
             SwitchTable.Columns.all,
             null,
             null,
@@ -88,7 +88,7 @@ class SwitchAdapter(private val context: Context) : RecyclerView.Adapter<Recycle
 
     private fun add(data: SwitchModel) {
         synchronized(SwitchAdapter::class.java) {
-            val returned = context.contentResolver.insert(SampleContentProvider.dirUri(), data.toContentValues())
+            val returned = context.contentResolver.insert(SampleContentProviderClient.dirUriOf(authority), data.toContentValues())
             Log.d("SwitchAdapter.add", returned.toString())
             data.id = returned.pathSegments[1].toLongOrNull()
             switches.add(data)

@@ -10,12 +10,17 @@ import kotlinx.android.synthetic.main.activity_sample.*
 
 class SampleActivity : AppCompatActivity() {
 
+    private val localSwitchAdapter by lazy { SwitchAdapter(this@SampleActivity, BuildConfig.LOCAL_PROVIDER_AUTHORITY) }
+    private val sharedSwitchAdapter by lazy { SwitchAdapter(this@SampleActivity, BuildConfig.SHARED_PROVIDER_AUTHORITY) }
+
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_storage_local -> {
+                recyclerview_switch.adapter = localSwitchAdapter
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_storage_shared -> {
+                recyclerview_switch.adapter = sharedSwitchAdapter
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -26,16 +31,16 @@ class SampleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sample)
 
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-
         LinearLayoutManager(this).let { llVertical ->
             llVertical.orientation = LinearLayoutManager.VERTICAL
             recyclerview_switch.apply {
-                adapter = SwitchAdapter(this@SampleActivity)
                 layoutManager = llVertical
                 addItemDecoration(DividerItemDecoration(this@SampleActivity, llVertical.orientation))
                 setHasFixedSize(true)
             }
         }
+
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        navigation.selectedItemId = R.id.navigation_storage_local
     }
 }
