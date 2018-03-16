@@ -2,6 +2,7 @@ package io.bitsound.contentprovidersample.tables
 
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
+import io.bitsound.contentprovidersample.BuildConfig
 
 object SwitchTable {
     const val NAME = "switches"
@@ -23,9 +24,11 @@ object SwitchTable {
     )
 
     object Columns {
+        const val ID = BaseColumns._ID
         const val KEY = "key"
         const val VALUE = "value"
         val all: Array<String> = arrayOf(
+            Columns.ID,
             Columns.KEY,
             Columns.VALUE
         )

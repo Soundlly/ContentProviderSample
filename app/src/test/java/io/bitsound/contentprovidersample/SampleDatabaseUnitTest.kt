@@ -37,8 +37,8 @@ class SampleDatabaseUnitTest {
     fun setUp() {
         database = SampleDatabase(RuntimeEnvironment.application)
         switchModelArray = arrayOf(
-            SwitchModel("true", true),
-            SwitchModel("false", false)
+            SwitchModel(null, "true", true),
+            SwitchModel(null, "false", false)
         )
     }
 
@@ -50,7 +50,7 @@ class SampleDatabaseUnitTest {
 
     @Test
     @Throws(Exception::class)
-    fun testCreateTable() {
+    fun testInsertElements() {
         switchModelArray.forEach {
             database.writableDatabase.insert(SwitchTable.NAME, null, it.toContentValues())
         }
@@ -69,7 +69,8 @@ class SampleDatabaseUnitTest {
         switchModelArray.forEachIndexed { index, namedSwitch ->
             cursor.moveToPosition(index)
             assertThat(cursor.position).isEqualTo(index)
-            assertThat(cursor.toSwitchModel()).isEqualTo(namedSwitch)
+            assertThat(cursor.toSwitchModel().key).isEqualTo(namedSwitch.key)
+            assertThat(cursor.toSwitchModel().value).isEqualTo(namedSwitch.value)
         }
 
         cursor.close()

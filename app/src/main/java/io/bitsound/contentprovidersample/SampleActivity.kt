@@ -32,8 +32,8 @@ class SampleActivity : AppCompatActivity() {
             llVertical.orientation = LinearLayoutManager.VERTICAL
             recyclerview_switch.apply {
                 adapter = SwitchAdapter(arrayListOf(
-                    SwitchModel("true", true),
-                    SwitchModel("false", false)
+                    SwitchModel(null, "true", true),
+                    SwitchModel(null, "false", false)
                 ))
                 layoutManager = llVertical
                 setHasFixedSize(true)
