@@ -2,7 +2,6 @@ package io.bitsound.contentprovidersample.tables
 
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
-import io.bitsound.contentprovidersample.BuildConfig
 
 object SwitchTable {
     const val NAME = "switches"
@@ -22,11 +21,6 @@ object SwitchTable {
         DROP TABLE IF EXISTS ${SwitchTable.NAME}
         """
     )
-
-    object ContentType {
-        const val DIR = "vnd.android.cursor.dir/vnd.${BuildConfig.LOCAL_PROVIDER_AUTHORITY}.country"
-        const val ITEM = "vnd.android.cursor.item/vnd.${BuildConfig.LOCAL_PROVIDER_AUTHORITY}.country"
-    }
 
     object Columns {
         const val ID = BaseColumns._ID

@@ -121,8 +121,8 @@ class SampleContentProvider : ContentProvider() {
 
     override fun getType(uri: Uri?): String {
         return when(uriMatcher.match(uri)) {
-            SWITCH_DIR -> SwitchTable.ContentType.DIR
-            SWITCH_ITEM -> SwitchTable.ContentType.ITEM
+            SWITCH_DIR -> "vnd.android.cursor.dir/vnd.${BuildConfig.LOCAL_PROVIDER_AUTHORITY}.country"
+            SWITCH_ITEM -> "vnd.android.cursor.item/vnd.${BuildConfig.LOCAL_PROVIDER_AUTHORITY}.country"
             else -> throw IllegalArgumentException("Invalid URI : $uri")
         }
     }
