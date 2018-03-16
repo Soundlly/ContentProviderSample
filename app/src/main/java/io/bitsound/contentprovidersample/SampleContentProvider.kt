@@ -22,15 +22,15 @@ class SampleContentProvider : ContentProvider() {
 
         private val uriMatcher : UriMatcher by lazy {
             UriMatcher(UriMatcher.NO_MATCH).apply {
-                addURI(BuildConfig.PROVIDER_AUTHORITY, SwitchTable.NAME, SWITCH_DIR)
-                addURI(BuildConfig.PROVIDER_AUTHORITY, "${SwitchTable.NAME}/#", SWITCH_ITEM)
+                addURI(BuildConfig.LOCAL_PROVIDER_AUTHORITY, SwitchTable.NAME, SWITCH_DIR)
+                addURI(BuildConfig.LOCAL_PROVIDER_AUTHORITY, "${SwitchTable.NAME}/#", SWITCH_ITEM)
             }
         }
 
         fun dirUri() : Uri?
-            = Uri.parse("content://${BuildConfig.PROVIDER_AUTHORITY}/${SwitchTable.NAME}")
+            = Uri.parse("content://${BuildConfig.LOCAL_PROVIDER_AUTHORITY}/${SwitchTable.NAME}")
         fun itemUri(switchModel: SwitchModel) : Uri?
-            = Uri.parse("content://${BuildConfig.PROVIDER_AUTHORITY}/${SwitchTable.NAME}/${switchModel.id}")
+            = Uri.parse("content://${BuildConfig.LOCAL_PROVIDER_AUTHORITY}/${SwitchTable.NAME}/${switchModel.id}")
     }
 
     override fun onCreate(): Boolean {
@@ -47,7 +47,7 @@ class SampleContentProvider : ContentProvider() {
                     null,
                     values
                 )
-                return Uri.parse("content://${BuildConfig.PROVIDER_AUTHORITY}/${SwitchTable.NAME}/$id")
+                return Uri.parse("content://${BuildConfig.LOCAL_PROVIDER_AUTHORITY}/${SwitchTable.NAME}/$id")
             }
             SWITCH_ITEM -> throw IllegalArgumentException("Invalid URI : $uri")
             else -> throw IllegalArgumentException("Invalid URI : $uri")

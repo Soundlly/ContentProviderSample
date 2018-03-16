@@ -12,6 +12,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -19,19 +20,58 @@ android {
         }
     }
 
-    flavorDimensions "source"
+    flavorDimensions "application"
     productFlavors {
-        local {
-            dimension "source"
-            applicationId "io.bitsound.contentprovidersample.local"
 
-            def providerAuthority = "${applicationId}.provider"
-            def providerPermission = "${applicationId}.provider.READWRITE"
+        def applicationIds = ["io.bitsound.contentprovidersample.alpha", "io.bitsound.contentprovidersample.beta"]
+        def providerAuthorities = applicationIds.collect { "${it}.provider" }
+        def providerPermissions = providerAuthorities.collect { "${it}.READWRITE" }
 
-            buildConfigField "String", "PROVIDER_AUTHORITY", "\"${providerAuthority}\""
-            manifestPlaceholders = [providerAuthority: providerAuthority, providerPermission: providerPermission]
-            resValue "string", "providerAuthority", providerAuthority
-            resValue "string", "providerPermission", providerPermission
+        alpha {
+            dimension "application"
+            def (local, shared) = [0, 1]
+
+            applicationId applicationIds[local]
+            def localProviderAuthority = providerAuthorities[local]
+            def localProviderPermission = providerPermissions[local]
+            def sharedProviderAuthority = providerAuthorities[shared]
+            def sharedProviderPermission = providerPermissions[shared]
+
+            buildConfigField "String", "LOCAL_PROVIDER_AUTHORITY", "\"${localProviderAuthority}\""
+            buildConfigField "String", "SHARED_PROVIDER_AUTHORITY", "\"${sharedProviderAuthority}\""
+            manifestPlaceholders = [
+                localProviderAuthority: localProviderAuthority,
+                localProviderPermission: localProviderPermission,
+                sharedProviderAuthority: sharedProviderAuthority,
+                sharedProviderPermission: sharedProviderPermission
+            ]
+            resValue "string", "localProviderAuthority", localProviderAuthority
+            resValue "string", "localProviderPermission", localProviderPermission
+            resValue "string", "sharedProviderAuthority", sharedProviderAuthority
+            resValue "string", "sharedProviderPermission", sharedProviderPermission
+        }
+        beta {
+            dimension "application"
+            def (local, shared) = [1, 0]
+
+            applicationId applicationIds[local]
+            def localProviderAuthority = providerAuthorities[local]
+            def localProviderPermission = providerPermissions[local]
+            def sharedProviderAuthority = providerAuthorities[shared]
+            def sharedProviderPermission = providerPermissions[shared]
+
+            buildConfigField "String", "LOCAL_PROVIDER_AUTHORITY", "\"${localProviderAuthority}\""
+            buildConfigField "String", "SHARED_PROVIDER_AUTHORITY", "\"${sharedProviderAuthority}\""
+            manifestPlaceholders = [
+                localProviderAuthority: localProviderAuthority,
+                localProviderPermission: localProviderPermission,
+                sharedProviderAuthority: sharedProviderAuthority,
+                sharedProviderPermission: sharedProviderPermission
+            ]
+            resValue "string", "localProviderAuthority", localProviderAuthority
+            resValue "string", "localProviderPermission", localProviderPermission
+            resValue "string", "sharedProviderAuthority", sharedProviderAuthority
+            resValue "string", "sharedProviderPermission", sharedProviderPermission
         }
     }
 

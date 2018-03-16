@@ -24,8 +24,8 @@ object SwitchTable {
     )
 
     object ContentType {
-        const val DIR = "vnd.android.cursor.dir/vnd.${BuildConfig.PROVIDER_AUTHORITY}.country"
-        const val ITEM = "vnd.android.cursor.item/vnd.${BuildConfig.PROVIDER_AUTHORITY}.country"
+        const val DIR = "vnd.android.cursor.dir/vnd.${BuildConfig.LOCAL_PROVIDER_AUTHORITY}.country"
+        const val ITEM = "vnd.android.cursor.item/vnd.${BuildConfig.LOCAL_PROVIDER_AUTHORITY}.country"
     }
 
     object Columns {
