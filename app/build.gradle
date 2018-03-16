@@ -18,6 +18,23 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    flavorDimensions "source"
+    productFlavors {
+        local {
+            dimension "source"
+            applicationId "io.bitsound.contentprovidersample.local"
+
+            def providerAuthority = "${applicationId}.provider"
+            def providerPermission = "${applicationId}.provider.READWRITE"
+
+            buildConfigField "String", "PROVIDER_AUTHORITY", "\"${providerAuthority}\""
+            manifestPlaceholders = [providerAuthority: providerAuthority, providerPermission: providerPermission]
+            resValue "string", "providerAuthority", providerAuthority
+            resValue "string", "providerPermission", providerPermission
+        }
+    }
+
     testOptions {
         unitTests {
             includeAndroidResources = true

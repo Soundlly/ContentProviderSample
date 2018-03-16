@@ -1,59 +1,89 @@
 package io.bitsound.contentprovidersample.switch
 
+import android.content.Context
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
+import android.text.InputType
+import android.util.Log
 import android.view.ViewGroup
+import android.widget.EditText
+import io.bitsound.contentprovidersample.SampleContentProvider
 import io.bitsound.contentprovidersample.models.SwitchModel
+import io.bitsound.contentprovidersample.switch.viewholder.FooterViewHolder
 import io.bitsound.contentprovidersample.switch.viewholder.HeaderViewHolder
 import io.bitsound.contentprovidersample.switch.viewholder.SwitchViewHolder
 import io.bitsound.contentprovidersample.switch.viewholder.ViewHolderFactory
 
 
-class SwitchAdapter(private val mTextLogDataList: MutableList<SwitchModel>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SwitchAdapter(private val context: Context, private val switches: MutableList<SwitchModel> = ArrayList()) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    companion object {
-        private const val MAX_TEXT_LOGS = 500
-    }
-
-    private var mIndexHeader: Int = 0  // Always at 0-index position
-    private var mIndexContent: Int = mIndexHeader + 1 // Comes right after Header
-    private var mIndexFooter: Int = mTextLogDataList.size + mIndexContent  // May come after Content
+    private var iHeader: Int = 0                        // First Header Index
+    private var iSwitch: Int = iHeader + 1              // First Switch Index
+    private var iFooter: Int = switches.size + iSwitch  // First Footer Index
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolderFactory.create(parent, viewType)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (position <= mIndexHeader) (holder as HeaderViewHolder).bind(android.R.color.white)
-        else (holder as SwitchViewHolder).bind(mTextLogDataList[position - mIndexContent])
+        when(position) {
+            in iHeader until iSwitch -> (holder as HeaderViewHolder).bind()
+            in iSwitch until iFooter -> (holder as SwitchViewHolder).bind(switches[position - iSwitch])
+            iFooter -> (holder as FooterViewHolder).bind({ view ->
+                val input = EditText(context).apply {
+                    inputType = InputType.TYPE_CLASS_TEXT
+                }
+
+                AlertDialog.Builder(context)
+                    .setTitle("Insert Switch Label")
+                    .setView(input)
+                    .setPositiveButton(android.R.string.ok, { _, _ ->
+                        this.add(SwitchModel(null, input.text.toString(), false))
+                    })
+                    .setNegativeButton(android.R.string.cancel) { dialog, _ ->
+                        dialog.cancel()
+                    }
+                    .show()
+            })
+        }
     }
 
-    override fun getItemCount(): Int {
-        return mTextLogDataList.size + mIndexContent
-    }
+    override fun getItemCount(): Int = iFooter + 1
 
-    override fun getItemViewType(position: Int): Int {
-        if (position <= mIndexHeader) return ViewHolderFactory.ViewType.HEADER
-        else return ViewHolderFactory.ViewType.SWITCH
+    override fun getItemViewType(position: Int): Int = when(position) {
+        in iHeader until iSwitch -> ViewHolderFactory.ViewType.HEADER
+        in iSwitch until iFooter -> ViewHolderFactory.ViewType.SWITCH
+        iFooter -> ViewHolderFactory.ViewType.FOOTER
+        else -> ViewHolderFactory.ViewType.NONE
     }
 
     private fun reconfigure() {
-        mIndexHeader = 0
-        mIndexContent = mIndexHeader + 1
-        mIndexFooter = mTextLogDataList.size + mIndexContent
+        iHeader = 0
+        iSwitch = iHeader + 1
+        iFooter = switches.size + iSwitch
         notifyDataSetChanged()
     }
 
-    fun add(data: SwitchModel) {
+    private fun add(data: SwitchModel) {
         synchronized(SwitchAdapter::class.java) {
-            mTextLogDataList.add(data)
-            while (mTextLogDataList.size > MAX_TEXT_LOGS) mTextLogDataList.removeAt(0)
+            val returned = context.contentResolver.insert(SampleContentProvider.dirUri(), data.toContentValues())
+            Log.d("SwitchAdapter.add", returned.toString())
+            data.id = returned.pathSegments[1].toLongOrNull()
+            switches.add(data)
+            reconfigure()
+        }
+    }
+
+    fun removeAt(index: Int) {
+        synchronized(SwitchAdapter::class.java) {
+            switches.removeAt(index)
             reconfigure()
         }
     }
 
     fun clear() {
         synchronized(SwitchAdapter::class.java) {
-            mTextLogDataList.clear()
+            switches.clear()
             reconfigure()
         }
     }

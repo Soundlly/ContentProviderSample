@@ -3,8 +3,8 @@ package io.bitsound.contentprovidersample
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import io.bitsound.contentprovidersample.models.SwitchModel
 import io.bitsound.contentprovidersample.switch.SwitchAdapter
 import kotlinx.android.synthetic.main.activity_sample.*
 
@@ -31,11 +31,9 @@ class SampleActivity : AppCompatActivity() {
         LinearLayoutManager(this).let { llVertical ->
             llVertical.orientation = LinearLayoutManager.VERTICAL
             recyclerview_switch.apply {
-                adapter = SwitchAdapter(arrayListOf(
-                    SwitchModel(null, "true", true),
-                    SwitchModel(null, "false", false)
-                ))
+                adapter = SwitchAdapter(this@SampleActivity)
                 layoutManager = llVertical
+                addItemDecoration(DividerItemDecoration(this@SampleActivity, llVertical.orientation))
                 setHasFixedSize(true)
             }
         }

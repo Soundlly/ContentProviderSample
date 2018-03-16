@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">ContentProviderSample</string>
-    <string name="title_home">Home</string>
+
     <string name="title_storage_local">Local</string>
     <string name="title_storage_shared">Shared</string>
+
+    <string name="add_switch">Add Switch</string>
 </resources>
