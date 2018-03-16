@@ -27,7 +27,6 @@ android {
         def applicationTitles = ["ContentProvider Sample A", "ContentProvider Sample B"]
         def applicationIds = ["io.bitsound.contentprovidersample.alpha", "io.bitsound.contentprovidersample.beta"]
         def providerAuthorities = applicationIds.collect { "${it}.provider" }
-        def providerPermissions = providerAuthorities.collect { "${it}.READWRITE" }
 
         alpha {
             dimension "application"
@@ -37,24 +36,21 @@ android {
             def applicationName = applicationNames[local]
             def applicationTitle = applicationTitles[local]
             def localProviderAuthority = providerAuthorities[local]
-            def localProviderPermission = providerPermissions[local]
             def sharedProviderAuthority = providerAuthorities[shared]
-            def sharedProviderPermission = providerPermissions[shared]
+            def commonProviderPermission = "io.bitsound.contentprovidersample.provider.READWRITE"
 
             buildConfigField "String", "LOCAL_PROVIDER_AUTHORITY", "\"${localProviderAuthority}\""
             buildConfigField "String", "SHARED_PROVIDER_AUTHORITY", "\"${sharedProviderAuthority}\""
             manifestPlaceholders = [
                 localProviderAuthority: localProviderAuthority,
-                localProviderPermission: localProviderPermission,
                 sharedProviderAuthority: sharedProviderAuthority,
-                sharedProviderPermission: sharedProviderPermission
+                commonProviderPermission: commonProviderPermission,
             ]
             resValue "string", "app_name", applicationName
             resValue "string", "app_title", applicationTitle
             resValue "string", "localProviderAuthority", localProviderAuthority
-            resValue "string", "localProviderPermission", localProviderPermission
             resValue "string", "sharedProviderAuthority", sharedProviderAuthority
-            resValue "string", "sharedProviderPermission", sharedProviderPermission
+            resValue "string", "commonProviderPermission", commonProviderPermission
         }
         beta {
             dimension "application"
@@ -64,24 +60,21 @@ android {
             def applicationName = applicationNames[local]
             def applicationTitle = applicationTitles[local]
             def localProviderAuthority = providerAuthorities[local]
-            def localProviderPermission = providerPermissions[local]
             def sharedProviderAuthority = providerAuthorities[shared]
-            def sharedProviderPermission = providerPermissions[shared]
+            def commonProviderPermission = "io.bitsound.contentprovidersample.provider.READWRITE"
 
             buildConfigField "String", "LOCAL_PROVIDER_AUTHORITY", "\"${localProviderAuthority}\""
             buildConfigField "String", "SHARED_PROVIDER_AUTHORITY", "\"${sharedProviderAuthority}\""
             manifestPlaceholders = [
                 localProviderAuthority: localProviderAuthority,
-                localProviderPermission: localProviderPermission,
                 sharedProviderAuthority: sharedProviderAuthority,
-                sharedProviderPermission: sharedProviderPermission
+                commonProviderPermission: commonProviderPermission,
             ]
             resValue "string", "app_name", applicationName
             resValue "string", "app_title", applicationTitle
             resValue "string", "localProviderAuthority", localProviderAuthority
-            resValue "string", "localProviderPermission", localProviderPermission
             resValue "string", "sharedProviderAuthority", sharedProviderAuthority
-            resValue "string", "sharedProviderPermission", sharedProviderPermission
+            resValue "string", "commonProviderPermission", commonProviderPermission
         }
     }
 

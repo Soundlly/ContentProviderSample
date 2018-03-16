@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import io.bitsound.contentprovidersample.R
 import io.bitsound.contentprovidersample.SampleContentProviderClient
 import io.bitsound.contentprovidersample.models.SwitchModel
@@ -64,18 +65,18 @@ class SwitchAdapter(private val context: Context, private val authority: String)
 
     private fun reconfigure() {
         switches = ArrayList()
-        context.contentResolver.query(
-            SampleContentProviderClient.dirUriOf(authority),
-            SwitchTable.Columns.all,
-            null,
-            null,
-            null
-        )?.let { cursor ->
-            if (cursor.moveToFirst()) {
-                do switches.add(cursor.toSwitchModel())
-                while(cursor.moveToNext())
-            }
-            cursor.close()
+        try {
+            context.contentResolver
+                .query(SampleContentProviderClient.dirUriOf(authority), SwitchTable.Columns.all, null, null, null)
+                ?.let { cursor ->
+                    if (cursor.moveToFirst()) {
+                        do switches.add(cursor.toSwitchModel())
+                        while (cursor.moveToNext())
+                    }
+                    cursor.close()
+                }
+        } catch (e: SecurityException) {
+            Toast.makeText(context, "Failed to fetch from ${SampleContentProviderClient.dirUriOf(authority)}", Toast.LENGTH_LONG).show()
         }
 
         iHeader = 0
@@ -86,10 +87,14 @@ class SwitchAdapter(private val context: Context, private val authority: String)
 
     private fun add(data: SwitchModel) {
         synchronized(SwitchAdapter::class.java) {
-            val returned = context.contentResolver.insert(SampleContentProviderClient.dirUriOf(authority), data.toContentValues())
-            Log.d("SwitchAdapter.add", returned.toString())
-            data.id = returned.pathSegments[1].toLongOrNull()
-            switches.add(data)
+            try {
+                val returned = context.contentResolver.insert(SampleContentProviderClient.dirUriOf(authority), data.toContentValues())
+                Log.d("SwitchAdapter.add", returned.toString())
+                data.id = returned.pathSegments[1].toLongOrNull()
+                switches.add(data)
+            } catch (e: SecurityException) {
+                Toast.makeText(context, "Failed to Insert $data into ${SampleContentProviderClient.dirUriOf(authority)}", Toast.LENGTH_LONG).show()
+            }
             reconfigure()
         }
     }

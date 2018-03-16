@@ -2,9 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="io.bitsound.contentprovidersample">
 
-    <permission android:name="${localProviderPermission}"/>
-    <uses-permission android:name="${localProviderPermission}"/>
-    <uses-permission android:name="${sharedProviderPermission}"/>
+    <permission android:name="${commonProviderPermission}"/>
+    <uses-permission android:name="${commonProviderPermission}"/>
 
     <application
         android:name=".App"
@@ -28,8 +27,8 @@
             android:enabled="true"
             android:exported="true"
             android:authorities="${localProviderAuthority}"
-            android:readPermission="${localProviderPermission}"
-            android:writePermission="${localProviderPermission}"/>
+            android:readPermission="${commonProviderPermission}"
+            android:writePermission="${commonProviderPermission}"/>
     </application>
 
 </manifest>
