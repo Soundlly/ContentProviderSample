@@ -3,10 +3,10 @@ package io.bitsound.contentprovidersample.switch
 import android.content.Context
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
-import android.text.InputType
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.EditText
+import io.bitsound.contentprovidersample.R
 import io.bitsound.contentprovidersample.SampleContentProviderClient
 import io.bitsound.contentprovidersample.models.SwitchModel
 import io.bitsound.contentprovidersample.models.toSwitchModel
@@ -36,16 +36,14 @@ class SwitchAdapter(private val context: Context, private val authority: String)
         when(position) {
             in iHeader until iSwitch -> (holder as HeaderViewHolder).bind()
             in iSwitch until iFooter -> (holder as SwitchViewHolder).bind(switches[position - iSwitch])
-            iFooter -> (holder as FooterViewHolder).bind({ view ->
-                val input = EditText(context).apply {
-                    inputType = InputType.TYPE_CLASS_TEXT
-                }
-
+            iFooter -> (holder as FooterViewHolder).bind({ _ ->
                 AlertDialog.Builder(context)
                     .setTitle("Insert Switch Label")
-                    .setView(input)
-                    .setPositiveButton(android.R.string.ok, { _, _ ->
-                        this.add(SwitchModel(null, input.text.toString(), false))
+                    .setView(R.layout.input_switch)
+                    .setCancelable(false)
+                    .setPositiveButton(android.R.string.ok, { dialog, _ ->
+                        val key = (dialog as AlertDialog).findViewById<EditText>(R.id.input_switch)?.text.toString()
+                        if (key.isNotBlank()) this.add(SwitchModel(null, key, false))
                     })
                     .setNegativeButton(android.R.string.cancel) { dialog, _ ->
                         dialog.cancel()
