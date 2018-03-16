@@ -1,5 +1,6 @@
 package io.bitsound.contentprovidersample
 
+import android.database.sqlite.SQLiteException
 import io.bitsound.contentprovidersample.models.SwitchModel
 import io.bitsound.contentprovidersample.models.toSwitchModel
 import io.bitsound.contentprovidersample.tables.SwitchTable
@@ -51,12 +52,12 @@ class SampleDatabaseUnitTest {
     @Throws(Exception::class)
     fun testCreateTable() {
         switchModelArray.forEach {
-            SwitchTable.insert(database.writableDatabase, it)
+            database.writableDatabase.insert(SwitchTable.NAME, null, it.toContentValues())
         }
 
         val cursor = database.readableDatabase.query(
             SwitchTable.NAME,
-            SwitchModel.Columns.all,
+            SwitchTable.Columns.all,
             null,
             null,
             null,
@@ -72,6 +73,18 @@ class SampleDatabaseUnitTest {
         }
 
         cursor.close()
+    }
+
+    @Test(expected = SQLiteException::class)
+    @Throws(Exception::class)
+    fun testDropTable() {
+        assertThat(database.readableDatabase
+            .query(SwitchTable.NAME, SwitchTable.Columns.all, null, null, null, null, null)
+            .count
+        ).isZero()
+
+        SwitchTable.drop(database.writableDatabase)
+        database.readableDatabase.query(SwitchTable.NAME, SwitchTable.Columns.all, null, null, null, null, null).count
     }
 
     @After

@@ -12,7 +12,7 @@ class SampleDatabase(private val context: Context) : SQLiteOpenHelper(
     DATABASE_VERSION
 ) {
     companion object {
-        const val DATABASE_NAME = "sample"
+        const val DATABASE_NAME = "sample.db"
         const val DATABASE_VERSION = 1
     }
 

@@ -2,24 +2,32 @@ package io.bitsound.contentprovidersample.tables
 
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
-import io.bitsound.contentprovidersample.models.SwitchModel
 
 object SwitchTable {
-    val NAME = SwitchModel::class.java.simpleName.toLowerCase()
+    const val NAME = "switches"
 
-    fun create(db: SQLiteDatabase)  = db.execSQL(
+    fun create(db: SQLiteDatabase) = db.execSQL(
         """
         CREATE TABLE IF NOT EXISTS ${SwitchTable.NAME} (
             ${BaseColumns._ID} INTEGER PRIMARY KEY AUTOINCREMENT,
-            ${SwitchModel.Columns.KEY} TEXT NOT NULL,
-            ${SwitchModel.Columns.VALUE} INTEGER DEFAULT 0
+            ${Columns.KEY} TEXT NOT NULL,
+            ${Columns.VALUE} INTEGER DEFAULT 0
         )
         """.trimIndent()
     )
 
-    fun insert(db: SQLiteDatabase, switchModel: SwitchModel) = db.insert(
-        SwitchTable.NAME,
-        null,
-        switchModel.toContentValues()
+    fun drop(db: SQLiteDatabase) = db.execSQL(
+        """
+        DROP TABLE IF EXISTS ${SwitchTable.NAME}
+        """
     )
+
+    object Columns {
+        const val KEY = "key"
+        const val VALUE = "value"
+        val all: Array<String> = arrayOf(
+            Columns.KEY,
+            Columns.VALUE
+        )
+    }
 }
