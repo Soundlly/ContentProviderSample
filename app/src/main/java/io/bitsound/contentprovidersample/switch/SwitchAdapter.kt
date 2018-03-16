@@ -36,7 +36,9 @@ class SwitchAdapter(private val context: Context, private val authority: String)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(position) {
             in iHeader until iSwitch -> (holder as HeaderViewHolder).bind()
-            in iSwitch until iFooter -> (holder as SwitchViewHolder).bind(switches[position - iSwitch])
+            in iSwitch until iFooter -> (holder as SwitchViewHolder).bind(switches[position - iSwitch], {
+                this.removeAt(position - iSwitch)
+            })
             iFooter -> (holder as FooterViewHolder).bind({ _ ->
                 AlertDialog.Builder(context)
                     .setTitle("Insert Switch Label")
@@ -99,9 +101,16 @@ class SwitchAdapter(private val context: Context, private val authority: String)
         }
     }
 
-    fun removeAt(index: Int) {
+    private fun removeAt(index: Int) {
         synchronized(SwitchAdapter::class.java) {
-            switches.removeAt(index)
+            val switch = switches[index]
+            try {
+                val returned = context.contentResolver.delete(SampleContentProviderClient.itemUriOf(authority, switch), null, null)
+                Log.d("SwitchAdapter.removeAt", returned.toString())
+                switches.removeAt(index)
+            } catch (e: SecurityException) {
+                Toast.makeText(context, "Failed to delete $switch through ${SampleContentProviderClient.dirUriOf(authority)}", Toast.LENGTH_LONG).show()
+            }
             reconfigure()
         }
     }
