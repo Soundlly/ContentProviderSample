@@ -23,6 +23,8 @@ android {
     flavorDimensions "application"
     productFlavors {
 
+        def applicationNames = ["C.Provider Sample A", "C.Provider Sample B"]
+        def applicationTitles = ["ContentProvider Sample A", "ContentProvider Sample B"]
         def applicationIds = ["io.bitsound.contentprovidersample.alpha", "io.bitsound.contentprovidersample.beta"]
         def providerAuthorities = applicationIds.collect { "${it}.provider" }
         def providerPermissions = providerAuthorities.collect { "${it}.READWRITE" }
@@ -32,6 +34,8 @@ android {
             def (local, shared) = [0, 1]
 
             applicationId applicationIds[local]
+            def applicationName = applicationNames[local]
+            def applicationTitle = applicationTitles[local]
             def localProviderAuthority = providerAuthorities[local]
             def localProviderPermission = providerPermissions[local]
             def sharedProviderAuthority = providerAuthorities[shared]
@@ -45,6 +49,8 @@ android {
                 sharedProviderAuthority: sharedProviderAuthority,
                 sharedProviderPermission: sharedProviderPermission
             ]
+            resValue "string", "app_name", applicationName
+            resValue "string", "app_title", applicationTitle
             resValue "string", "localProviderAuthority", localProviderAuthority
             resValue "string", "localProviderPermission", localProviderPermission
             resValue "string", "sharedProviderAuthority", sharedProviderAuthority
@@ -55,6 +61,8 @@ android {
             def (local, shared) = [1, 0]
 
             applicationId applicationIds[local]
+            def applicationName = applicationNames[local]
+            def applicationTitle = applicationTitles[local]
             def localProviderAuthority = providerAuthorities[local]
             def localProviderPermission = providerPermissions[local]
             def sharedProviderAuthority = providerAuthorities[shared]
@@ -68,6 +76,8 @@ android {
                 sharedProviderAuthority: sharedProviderAuthority,
                 sharedProviderPermission: sharedProviderPermission
             ]
+            resValue "string", "app_name", applicationName
+            resValue "string", "app_title", applicationTitle
             resValue "string", "localProviderAuthority", localProviderAuthority
             resValue "string", "localProviderPermission", localProviderPermission
             resValue "string", "sharedProviderAuthority", sharedProviderAuthority
